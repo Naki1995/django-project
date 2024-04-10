@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  django-app:
+    driver: bridge
+
+services:
+  db:
+    build:
+      context: ./db
+      dockerfile: "Dockerfile"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # MYSQL_HOST: ${MYSQL_HOST}
+      # MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      - django-app
+  app:
+    build: .
+    ports:
+      - "8001:8001"
+    networks:
+      - django-app
+    depends_on:
+      - db
+    

@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  django-app:
+    driver: bridge
+
+services:
+  db:
+    image: narek95/my-db:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # MYSQL_HOST: ${MYSQL_HOST}
+      # MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      - django-app
+    
+  app:
+    image: narek95/my-django-app:latest
+    ports:
+      - "8001:8001"
+    networks:
+      - django-app
+    depends_on:
+      - db
+    restart: always
+    
